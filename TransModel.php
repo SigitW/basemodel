@@ -17,7 +17,7 @@ class TransModel extends BaseModel{
         $sql    = $this->buildSelectQuery($tableName, $fields, $where);
         $data   = $conn->query($sql);
         if (!$data)
-            throw new Exception("[TransModel] " . $conn->error, 1);
+            throw new Exception("[TransModel] " .$tableName. ", " . $conn->error, 1);
         $conn->close();
         return $this->arrayQueryMaping($data);
     }
@@ -30,7 +30,7 @@ class TransModel extends BaseModel{
         $sql    = $this->buildInsertQuery($tableName, $arrData, $who);
         $data   = $conn->query($sql);
         if (!$data)
-            throw new Exception("[TransModel] " . $conn->error, 1); 
+            throw new Exception("[TransModel] " .$tableName. ", " . $conn->error, 1); 
         $conn->close();
     }
 
@@ -42,7 +42,7 @@ class TransModel extends BaseModel{
         $sql    = $this->buildUpdateQuery($tableName, $arrData, $arrWhere, $who);
         $data   = $conn->query($sql);
         if (!$data)
-            throw new Exception("[TransModel] " . $conn->error, 1);
+            throw new Exception("[TransModel] " .$tableName. ", " . $conn->error, 1);
         $conn->close();
     }
 
