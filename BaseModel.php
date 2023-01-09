@@ -5,7 +5,7 @@ require_once('Config.php');
 
 use Config\Config;
 use Exception;
-// require_once("Config.php");
+
 class BaseModel extends Config{
 
     protected function loadConnection(){
