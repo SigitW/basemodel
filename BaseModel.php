@@ -1,6 +1,11 @@
 <?php 
+namespace BaseModel;
 
-require_once("Config.php");
+require_once('Config.php');
+
+use Config\Config;
+use Exception;
+// require_once("Config.php");
 class BaseModel extends Config{
 
     protected function loadConnection(){
@@ -34,7 +39,7 @@ class BaseModel extends Config{
         return $isEquals && $isLike;
     }
 
-    protected function buildInsertQuery($tableName, $data = array(), $who) : string {
+    protected function buildInsertQuery($tableName, $data = array(), $who, $withTimestamp) : string {
         
         $today  = $this->getTodayDateTime();
     
@@ -47,18 +52,30 @@ class BaseModel extends Config{
         $column = "";
         $values = "";
     
+        $jumlahData = count($data);
+        $n = 1;
         foreach ($data as $i => $p) {
-            $column .= "".$i. ",";
-            $values .= "'".$p. "',";
+            $column .= $i;
+            $values .= "'".$p."'";
+            if ($n < $jumlahData){
+                $column .= ","; 
+                $values .= ",";
+            }
+            $n++;
         }
-    
-        $sql = "INSERT INTO " . $tableName . "(" . $column . " created_at, created_who" . ")"
-                . " VALUES (" . $values . " '".$today."', '".$who."')";  
+
+        if ($withTimestamp){
+            $sql = "INSERT INTO " . $tableName . "(" . $column . ", created_at, created_who" . ")"
+            . " VALUES (" . $values . ", '".$today."', '".$who."')";  
+        } else {
+            $sql = "INSERT INTO " . $tableName . "(" . $column . ")"
+            . " VALUES (" . $values . ")";  
+        }
         
         return $sql;
     }
     
-    protected function buildUpdateQuery($tableName, $data = array(), $idData = array(), $who) : string {
+    protected function buildUpdateQuery($tableName, $data = array(), $idData = array(), $who, $withTimestamp) : string {
         
         $today  = $this->getTodayDateTime();
     
@@ -81,7 +98,10 @@ class BaseModel extends Config{
             }
             $n1 ++;
         }
-        $setBuilder .= ", updated_at = '".$today."', updated_who = '".$who."' ";
+
+        if ($withTimestamp){
+            $setBuilder .= ", updated_at = '".$today."', updated_who = '".$who."' ";
+        }
     
         $whereBuilder = " WHERE ";
         $n2 = 1;
