@@ -5,7 +5,6 @@ require_once('BaseModel.php');
 
 use BaseModel\BaseModel;
 use Exception;
-// require_once("BaseModel.php");
 
 class TransModel extends BaseModel{
 
